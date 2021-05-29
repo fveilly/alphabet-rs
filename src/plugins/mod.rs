@@ -10,6 +10,7 @@ pub struct GamePlugin;
 use audio::InternalAudioPlugin;
 use text::TextPlugin;
 use loader::LoaderPlugin;
+use std::time::SystemTime;
 
 #[derive(Clone, Eq, PartialEq, Debug, Hash)]
 pub enum AppState {
@@ -17,14 +18,15 @@ pub enum AppState {
     Ready,
 }
 
-pub struct KeyboardAssets {
-    key_code: Option<KeyCode>
+pub struct GameContext {
+    key_code: Option<KeyCode>,
+    last_keypress: SystemTime
 }
 
 impl Plugin for GamePlugin {
     fn build(&self, app: &mut AppBuilder) {
         app.insert_resource(ClearColor(Color::BLACK))
-           .insert_resource(KeyboardAssets { key_code: None })
+           .insert_resource(GameContext { key_code: None, last_keypress: SystemTime::now() })
            .add_state(AppState::Loading)
            .add_plugin(LoaderPlugin)
            .add_plugin(InternalAudioPlugin)

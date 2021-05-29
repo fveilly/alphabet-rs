@@ -5,7 +5,9 @@ use bevy::{
 
 use crate::plugins::AppState;
 use crate::plugins::loader::AudioAssets;
-use crate::plugins::KeyboardAssets;
+use crate::plugins::GameContext;
+
+use std::time::SystemTime;
 
 pub struct InternalAudioPlugin;
 
@@ -26,13 +28,22 @@ fn start_audio(_audio_assets: Res<AudioAssets>, _audio: Res<Audio>) {
 fn stop_audio(_audio: Res<Audio>) {
 }
 
-fn keyboard_input_system(audio_assets: Res<AudioAssets>, mut keyboard_asset: ResMut <KeyboardAssets>, audio: Res<Audio>, mut keyboard_input_events: EventReader<KeyboardInput>) {
+fn keyboard_input_system(audio_assets: Res<AudioAssets>, mut game_ctx: ResMut<GameContext>, audio: Res<Audio>, mut keyboard_input_events: EventReader<KeyboardInput>) {
     use bevy::input::ElementState;
+    let sys_time = SystemTime::now();
 
     for event in keyboard_input_events.iter() {
         match event.state {
             ElementState::Pressed => {
                 println!("Key press: {:?} ({})", event.key_code, event.scan_code);
+
+                if let Ok(duration) = sys_time.duration_since(game_ctx.last_keypress) {
+                    const KEYPRESS_LIMIT_MS: u128 = 150;
+                    if duration.as_millis() < KEYPRESS_LIMIT_MS {
+                        println!("too soon, waiting for {}ms...", KEYPRESS_LIMIT_MS - duration.as_millis());
+                        continue;
+                    }
+                }
 
                 if let Some(key_code) = event.key_code {
                     let asset = audio_assets.assets.get(&key_code);
@@ -41,7 +52,8 @@ fn keyboard_input_system(audio_assets: Res<AudioAssets>, mut keyboard_asset: Res
                     }
                 }
 
-                keyboard_asset.key_code = event.key_code;
+                game_ctx.key_code = event.key_code;
+                game_ctx.last_keypress = SystemTime::now();
             }
             ElementState::Released => {
                 println!("Key release: {:?} ({})", event.key_code, event.scan_code);

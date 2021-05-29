@@ -2,7 +2,7 @@ use bevy::prelude::*;
 
 pub struct TextPlugin;
 
-use crate::plugins::KeyboardAssets;
+use crate::plugins::GameContext;
 use crate::plugins::keymap::str_from_key;
 
 impl Plugin for TextPlugin  {
@@ -49,9 +49,9 @@ fn setup(mut commands: Commands, asset_server: Res<AssetServer>)
         .insert(AlphabetText);
 }
 
-fn text_update_system(keyboard_asset: Res <KeyboardAssets>, mut query: Query<&mut Text, With<AlphabetText>>) {
+fn text_update_system(game_ctx: Res <GameContext>, mut query: Query<&mut Text, With<AlphabetText>>) {
     for mut text in query.iter_mut() {
-        if let Some(key_code) = keyboard_asset.key_code {
+        if let Some(key_code) = game_ctx.key_code {
             if let Ok(key_str) = str_from_key(key_code) {
                 text.sections[0].value = format!("{}", key_str);
             }
