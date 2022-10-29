@@ -12,7 +12,7 @@ use std::time::SystemTime;
 pub struct InternalAudioPlugin;
 
 impl Plugin for InternalAudioPlugin  {
-    fn build(&self, app: &mut AppBuilder) {
+    fn build(&self, app: &mut App) {
         app.add_system_set(SystemSet::on_enter(AppState::Ready).with_system(start_audio.system()))
             .add_system_set(
                 SystemSet::on_update(AppState::Ready)

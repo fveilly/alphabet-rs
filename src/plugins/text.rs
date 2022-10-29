@@ -6,12 +6,13 @@ use crate::plugins::GameContext;
 use crate::plugins::keymap::str_from_key;
 
 impl Plugin for TextPlugin  {
-    fn build(&self, app: &mut AppBuilder) {
+    fn build(&self, app: &mut App) {
         app.add_startup_system(setup.system())
         .add_system(text_update_system.system());
     }
 }
 
+#[derive(Component)]
 struct AlphabetText;
 
 fn setup(mut commands: Commands, asset_server: Res<AssetServer>)

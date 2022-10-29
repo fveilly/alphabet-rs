@@ -1,0 +1,12 @@
+[package]
+name = "alphabet"
+version = "0.1.0"
+authors = ["Florent Veilly <florent.veilly@gmail.com>"]
+edition = "2021"
+
+[dependencies]
+bevy = { version = "0.6.1", features = ["serialize", "wav"] }
+toml = "0.5.8"
+anyhow = "1.0.40"
+bevy_asset_ron = "0.3.0"
+serde = { version = "1.0.125", features = ["derive"] }

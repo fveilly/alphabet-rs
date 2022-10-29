@@ -24,7 +24,7 @@ pub struct GameContext {
 }
 
 impl Plugin for GamePlugin {
-    fn build(&self, app: &mut AppBuilder) {
+    fn build(&self, app: &mut App) {
         app.insert_resource(ClearColor(Color::BLACK))
            .insert_resource(GameContext { key_code: None, last_keypress: SystemTime::now() })
            .add_state(AppState::Loading)

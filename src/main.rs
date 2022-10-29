@@ -19,7 +19,7 @@ fn main() {
     let config_data = fs::read_to_string("keymap.toml").unwrap();
     let config: Config = toml::from_str(&config_data).unwrap();
 
-    App::build()
+    App::new()
         .insert_resource(WindowDescriptor {
             title: "Alphabet".to_string(),
             width: 640.,

@@ -19,7 +19,7 @@ pub struct AudioAssets {
 }
 
 impl Plugin for LoaderPlugin {
-    fn build(&self, app: &mut AppBuilder) {
+    fn build(&self, app: &mut App) {
         app.add_system_set(
             SystemSet::on_enter(AppState::Loading).with_system(start_loading.system()),
         )
